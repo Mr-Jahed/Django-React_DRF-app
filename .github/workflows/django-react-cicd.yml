@@ -25,7 +25,7 @@ jobs:
       - name: Build Backend Image
         run: |
           echo "Building backend..."
-          ls -R   # 👈 Debug: Shows all files so we confirm path
+          ls -R   #  Debug: Shows all files so we confirm path
           docker build -f backend/Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/react-django-backend:latest .
 
       - name: Build Frontend Image
