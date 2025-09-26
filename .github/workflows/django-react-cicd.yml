@@ -1,37 +1,38 @@
-name: CI/CD with Docker
+name: CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - master
+    branches: [ "master" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Debug file paths
+        run: |
+          echo "Listing all files to find Dockerfile path..."
+          ls -R
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
-      - name: Log in to DockerHub
+      - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # 🧠 Build Backend Image (ensure backend/Dockerfile exists)
       - name: Build Backend Image
-        run: |
-          echo "Building backend..."
-          ls -R   #  Debug: Shows all files so we confirm path
-          docker build -f backend/Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/react-django-backend:latest .
+        run: docker build -f backend/Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/react-django-backend:latest .
 
+      # 🧠 Build Frontend Image (ensure frontend/Dockerfile exists)
       - name: Build Frontend Image
-        run: |
-          echo "Building frontend..."
-          docker build -f frontend/Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/react-django-frontend:latest .
+        run: docker build -f frontend/Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/react-django-frontend:latest .
 
       - name: Push Backend Image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/react-django-backend:latest
