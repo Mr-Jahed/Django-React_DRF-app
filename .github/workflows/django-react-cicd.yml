@@ -28,17 +28,18 @@ jobs:
 
       # 🧠 Build Backend Image (ensure backend/Dockerfile exists)
       - name: Build Backend Image
-        run: docker build -f backend/Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/react-django-backend:latest .
+        run: docker build --no-cache -f backend/Dockerfile -t jahed0307/react-django-backend:latest .
+
 
       # 🧠 Build Frontend Image (ensure frontend/Dockerfile exists)
       - name: Build Frontend Image
-        run: docker build -f frontend/Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/react-django-frontend:latest .
+        run: docker build --no-cache -f frontend/Dockerfile -t jahed0307/react-django-frontend:latest .
 
       - name: Push Backend Image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/react-django-backend:latest
+        run: docker push jahed0307/react-django-backend:latest
 
       - name: Push Frontend Image
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/react-django-frontend:latest
+        run: docker push jahed0307/react-django-frontend:latest
 
       # 🔹 Optional: Deploy using docker-compose
       - name: Deploy using docker-compose
