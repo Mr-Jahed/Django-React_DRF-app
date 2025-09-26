@@ -1,24 +1,20 @@
-# 🏗️ Build stage
+# frontend/Dockerfile
 FROM node:20-bullseye AS build
 
 WORKDIR /app
 
-# Copy package files and install deps
-COPY package*.json ./
+# Copy package files from frontend folder
+COPY frontend/package*.json ./
+
 RUN npm install --legacy-peer-deps
 
-# Copy rest of the app and build
-COPY . .
+# Copy the rest of the frontend
+COPY frontend/ ./
+
 RUN npm run build
 
-# 🌍 Production stage
+# Stage 2 - Serve via Nginx
 FROM nginx:1.25-alpine
-
-# Copy built files to nginx html folder
 COPY --from=build /app/dist /usr/share/nginx/html
-
-# Expose port
 EXPOSE 8000
-
-# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
