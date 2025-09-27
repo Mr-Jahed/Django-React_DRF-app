@@ -9,45 +9,48 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 🧩 1. Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 🧠 Debug files to verify structure
       - name: Debug file paths
         run: |
-          echo "🔍 Listing all files to verify paths..."
+          echo "Listing all files to verify structure..."
           ls -R
 
-      # 🧩 2. Set up Docker Buildx
+      # 🧱 Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # 🧩 3. Login to DockerHub
+      # 🔑 Login to DockerHub
       - name: Login to DockerHub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # 🐳 4. Build Backend Image
+      # 🐍 Build Backend Image
       - name: Build Backend Image
-        run: docker build --no-cache -f backend/Dockerfile -t jahed0307/react-django-backend:latest .
+        run: docker build -f backend/Dockerfile -t jahed0307/react-django-backend:latest ./backend
 
-      # 🐳 5. Build Frontend Image
+      # ⚛️ Build Frontend Image
       - name: Build Frontend Image
-        run: docker build --no-cache -f frontend/Dockerfile -t jahed0307/react-django-frontend:latest .
+        run: docker build -f frontend/Dockerfile -t jahed0307/react-django-frontend:latest ./frontend
 
-      # 🚀 6. Push Backend Image
+      # 🚀 Push images to DockerHub
       - name: Push Backend Image
         run: docker push jahed0307/react-django-backend:latest
 
-      # 🚀 7. Push Frontend Image
       - name: Push Frontend Image
         run: docker push jahed0307/react-django-frontend:latest
 
-      # ⚙️ 8. Use modern docker compose (NO ERROR)
-      - name: Deploy using docker compose
+      # 🛠️ Install Docker Compose (for old command compatibility)
+      - name: Install Docker Compose
         run: |
-          docker compose down || true
-          docker compose up -d --build
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      # 🧠 Deploy using docker-compose
+      - name: Deploy using docker-compose
+        run: |
+          docker-compose down || true
+          docker-compose up -d --build
