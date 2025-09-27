@@ -1,15 +1,15 @@
-# frontend/Dockerfile
+# Stage 1 - Build React App
 FROM node:20-bullseye AS build
 
 WORKDIR /app
 
-# Copy package files from frontend folder
-COPY frontend/package*.json ./
+# Copy package files
+COPY package*.json ./
 
 RUN npm install --legacy-peer-deps
 
-# Copy the rest of the frontend
-COPY frontend/ ./
+# Copy rest of the frontend files
+COPY . .
 
 RUN npm run build
 

@@ -30,11 +30,11 @@ jobs:
 
       # 🐍 Build Backend Image
       - name: Build Backend Image
-        run: docker build -f backend/Dockerfile -t jahed0307/react-django-backend:latest ./backend
+        run: docker build -f ./backend/Dockerfile -t jahed0307/react-django-backend:latest ./backend
 
       # ⚛️ Build Frontend Image
       - name: Build Frontend Image
-        run: docker build -f frontend/Dockerfile -t jahed0307/react-django-frontend:latest ./frontend
+        run: docker build -f ./frontend/Dockerfile -t jahed0307/react-django-frontend:latest ./frontend
 
       # 🚀 Push images to DockerHub
       - name: Push Backend Image
